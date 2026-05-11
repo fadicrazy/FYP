@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Consultation, ConsultationDocument, ConsultationStatus } from './consultation.schema';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto'; // ✅ uuid ki jagah crypto use kiya
 
 @Injectable()
 export class ConsultationsService {
@@ -74,7 +74,7 @@ export class ConsultationsService {
   }
 
   async start(id: string): Promise<ConsultationDocument> {
-    const videoRoomId = uuidv4();
+    const videoRoomId = randomUUID(); // ✅ uuidv4() ki jagah randomUUID()
     const consultation = await this.consultationModel
       .findByIdAndUpdate(
         id,
