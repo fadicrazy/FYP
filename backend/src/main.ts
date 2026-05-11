@@ -8,11 +8,16 @@ async function bootstrap() {
 
   const configService = app.get(ConfigService);
 
-  // Enable CORS - Live environment ke liye flexible rakha hai
+  // Enable CORS
   app.enableCors({
-    origin: true, 
+    origin: [
+      'https://fyp-psi-sand.vercel.app',  // aapka frontend URL
+      'http://localhost:5173',              // local development
+      'http://localhost:3000',
+    ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
+    allowedHeaders: 'Content-Type, Authorization',
   });
 
   // Global validation pipe
@@ -27,7 +32,6 @@ async function bootstrap() {
   // Global prefix
   app.setGlobalPrefix('api');
 
-  // Vercel process.env.PORT use karta hai
   const port = process.env.PORT || configService.get('PORT') || 3000;
   
   await app.listen(port);
