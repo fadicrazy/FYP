@@ -8,9 +8,10 @@ async function bootstrap() {
 
   const configService = app.get(ConfigService);
 
-  // Enable CORS
+  // Enable CORS - Live environment ke liye flexible rakha hai
   app.enableCors({
-    origin: configService.get('FRONTEND_URL') || 'http://localhost:5173',
+    origin: true, 
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
 
@@ -26,8 +27,10 @@ async function bootstrap() {
   // Global prefix
   app.setGlobalPrefix('api');
 
-  const port = configService.get('PORT') || 3000;
+  // Vercel process.env.PORT use karta hai
+  const port = process.env.PORT || configService.get('PORT') || 3000;
+  
   await app.listen(port);
-  console.log(`🏥 Telehealth API running on http://localhost:${port}`);
+  console.log(`🏥 Telehealth API is live on port: ${port}`);
 }
 bootstrap();
