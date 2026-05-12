@@ -12,6 +12,7 @@ const config_1 = require("@nestjs/config");
 const mongoose_1 = require("@nestjs/mongoose");
 const serve_static_1 = require("@nestjs/serve-static");
 const path_1 = require("path");
+const os_1 = require("os");
 const auth_module_1 = require("./auth/auth.module");
 const users_module_1 = require("./users/users.module");
 const patients_module_1 = require("./patients/patients.module");
@@ -46,7 +47,7 @@ exports.AppModule = AppModule = __decorate([
                 },
             }),
             serve_static_1.ServeStaticModule.forRoot({
-                rootPath: (0, path_1.join)(__dirname, '..', 'uploads'),
+                rootPath: process.env.VERCEL ? (0, path_1.join)((0, os_1.tmpdir)(), 'uploads') : (0, path_1.join)(__dirname, '..', 'uploads'),
                 serveRoot: '/uploads',
             }),
             auth_module_1.AuthModule,

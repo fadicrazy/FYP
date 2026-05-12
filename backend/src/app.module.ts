@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { tmpdir } from 'os';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { PatientsModule } from './patients/patients.module';
@@ -38,9 +39,8 @@ const logger = new Logger('AppModule');
       },
     }),
 
-    // Serve uploaded files
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'uploads'),
+      rootPath: process.env.VERCEL ? join(tmpdir(), 'uploads') : join(__dirname, '..', 'uploads'),
       serveRoot: '/uploads',
     }),
 
