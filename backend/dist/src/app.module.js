@@ -23,6 +23,7 @@ const admin_module_1 = require("./admin/admin.module");
 const uploads_module_1 = require("./uploads/uploads.module");
 const chat_module_1 = require("./chat/chat.module");
 const video_module_1 = require("./video/video.module");
+const logger = new common_1.Logger('AppModule');
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -30,7 +31,20 @@ exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
             config_1.ConfigModule.forRoot({ isGlobal: true }),
-            mongoose_1.MongooseModule.forRoot(process.env.MONGODB_URI || 'mongodb://localhost:27017/telehealth'),
+            mongoose_1.MongooseModule.forRootAsync({
+                useFactory: () => {
+                    const uri = process.env.MONGODB_URI || 'mongodb://localhost:27017/telehealth';
+                    logger.log(`Connecting to MongoDB...`);
+                    return {
+                        uri,
+                        connectionFactory: (connection) => {
+                            connection.on('connected', () => logger.log('Successfully connected to MongoDB'));
+                            connection.on('error', (err) => logger.error(`MongoDB connection error: ${err.message}`));
+                            return connection;
+                        }
+                    };
+                },
+            }),
             serve_static_1.ServeStaticModule.forRoot({
                 rootPath: (0, path_1.join)(__dirname, '..', 'uploads'),
                 serveRoot: '/uploads',

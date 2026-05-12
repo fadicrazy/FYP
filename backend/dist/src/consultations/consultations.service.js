@@ -17,7 +17,7 @@ const common_1 = require("@nestjs/common");
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 const consultation_schema_1 = require("./consultation.schema");
-const uuid_1 = require("uuid");
+const crypto_1 = require("crypto");
 let ConsultationsService = class ConsultationsService {
     consultationModel;
     constructor(consultationModel) {
@@ -78,7 +78,7 @@ let ConsultationsService = class ConsultationsService {
         return consultation;
     }
     async start(id) {
-        const videoRoomId = (0, uuid_1.v4)();
+        const videoRoomId = (0, crypto_1.randomUUID)();
         const consultation = await this.consultationModel
             .findByIdAndUpdate(id, {
             status: consultation_schema_1.ConsultationStatus.ACTIVE,
