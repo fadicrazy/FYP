@@ -2,7 +2,7 @@
   "name": "telehealth-root",
   "private": true,
   "scripts": {
-    "vercel-build": "npm run build --prefix frontend && npm run build --prefix backend",
+    "build": "npm run build --prefix frontend && npm run build --prefix backend",
     "install-all": "npm install --prefix frontend && npm install --prefix backend"
   }
 }
