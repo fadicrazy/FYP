@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
 
-const SOCKET_URL = 'http://localhost:3000';
+const SOCKET_URL = import.meta.env.PROD ? '' : 'http://localhost:3000';
 
 export function useSocket(namespace = '') {
   const [socket, setSocket] = useState(null);
