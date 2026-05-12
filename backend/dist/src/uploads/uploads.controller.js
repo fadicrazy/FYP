@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const platform_express_1 = require("@nestjs/platform-express");
 const multer_1 = require("multer");
 const path_1 = require("path");
+const os_1 = require("os");
 const uuid_1 = require("uuid");
 const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
 let UploadsController = class UploadsController {
@@ -35,7 +36,7 @@ __decorate([
     (0, common_1.Post)(),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file', {
         storage: (0, multer_1.diskStorage)({
-            destination: './uploads',
+            destination: process.env.VERCEL ? (0, path_1.join)((0, os_1.tmpdir)(), 'uploads') : './uploads',
             filename: (req, file, cb) => {
                 const uniqueName = `${(0, uuid_1.v4)()}${(0, path_1.extname)(file.originalname)}`;
                 cb(null, uniqueName);

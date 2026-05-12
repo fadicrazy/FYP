@@ -1,8 +1,9 @@
-import { Module } from '@nestjs/common';
+import { Module, Logger } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { tmpdir } from 'os';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { PatientsModule } from './patients/patients.module';
@@ -15,17 +16,31 @@ import { UploadsModule } from './uploads/uploads.module';
 import { ChatModule } from './chat/chat.module';
 import { VideoModule } from './video/video.module';
 
+const logger = new Logger('AppModule');
+
 @Module({
   imports: [
     // Config
     ConfigModule.forRoot({ isGlobal: true }),
 
     // MongoDB connection
-    MongooseModule.forRoot(process.env.MONGODB_URI || 'mongodb://localhost:27017/telehealth'),
+    MongooseModule.forRootAsync({
+      useFactory: () => {
+        const uri = process.env.MONGODB_URI || 'mongodb://localhost:27017/telehealth';
+        logger.log(`Connecting to MongoDB...`);
+        return {
+          uri,
+          connectionFactory: (connection) => {
+            connection.on('connected', () => logger.log('Successfully connected to MongoDB'));
+            connection.on('error', (err) => logger.error(`MongoDB connection error: ${err.message}`));
+            return connection;
+          }
+        };
+      },
+    }),
 
-    // Serve uploaded files
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'uploads'),
+      rootPath: process.env.VERCEL ? join(tmpdir(), 'uploads') : join(__dirname, '..', 'uploads'),
       serveRoot: '/uploads',
     }),
 

@@ -8,8 +8,14 @@ async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     const configService = app.get(config_1.ConfigService);
     app.enableCors({
-        origin: configService.get('FRONTEND_URL') || 'http://localhost:5173',
+        origin: [
+            'https://fyp-psi-sand.vercel.app',
+            'http://localhost:5173',
+            'http://localhost:3000',
+        ],
+        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
         credentials: true,
+        allowedHeaders: 'Content-Type, Authorization',
     });
     app.useGlobalPipes(new common_1.ValidationPipe({
         whitelist: true,
@@ -17,9 +23,9 @@ async function bootstrap() {
         transform: true,
     }));
     app.setGlobalPrefix('api');
-    const port = configService.get('PORT') || 3000;
+    const port = process.env.PORT || configService.get('PORT') || 3000;
     await app.listen(port);
-    console.log(`🏥 Telehealth API running on http://localhost:${port}`);
+    console.log(`🏥 Telehealth API is live on port: ${port}`);
 }
 bootstrap();
 //# sourceMappingURL=main.js.map

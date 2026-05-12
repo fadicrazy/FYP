@@ -1,7 +1,8 @@
 import { Controller, Post, UseInterceptors, UploadedFile, UseGuards } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { extname } from 'path';
+import { extname, join } from 'path';
+import { tmpdir } from 'os';
 import { v4 as uuidv4 } from 'uuid';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
@@ -12,7 +13,7 @@ export class UploadsController {
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
-        destination: './uploads',
+        destination: process.env.VERCEL ? join(tmpdir(), 'uploads') : './uploads',
         filename: (req, file, cb) => {
           const uniqueName = `${uuidv4()}${extname(file.originalname)}`;
           cb(null, uniqueName);
