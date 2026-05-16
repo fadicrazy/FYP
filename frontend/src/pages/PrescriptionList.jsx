@@ -59,6 +59,13 @@ export default function PrescriptionList() {
                 </div>
                 
                 <div className="flex items-center gap-2">
+                  <FiUser className="text-medical-blue text-sm" />
+                  <p className="text-xs font-medium text-gray-500">
+                    By: Dr. {p.doctorId?.name || 'Unknown'} ({p.doctorId?.specialization || 'Consultant'})
+                  </p>
+                </div>
+                
+                <div className="flex items-center gap-2">
                   <FiActivity className="text-gray-400 text-sm" />
                   <p className="text-sm font-medium text-gray-600">
                     Diagnosis: <span className="italic">{p.diagnosis || 'General checkup'}</span>

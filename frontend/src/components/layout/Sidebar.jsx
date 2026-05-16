@@ -45,8 +45,8 @@ const roleLabels = {
 export default function Sidebar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const role = user?.role || 'nurse';
-  const menu = roleMenus[role] || roleMenus.nurse;
+  const role = user?.role;
+  const menu = roleMenus[role] || [];
 
   const handleLogout = () => {
     logout();

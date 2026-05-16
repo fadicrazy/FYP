@@ -17,8 +17,11 @@ export function useVideoCall(roomId, user) {
     const p = new Peer(user.id);
     setPeer(p);
 
+    const streamRef = { current: null };
+
     // Get Media Stream
     navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((stream) => {
+      streamRef.current = stream;
       setMyStream(stream);
       if (myVideoRef.current) {
         myVideoRef.current.srcObject = stream;
@@ -41,7 +44,8 @@ export function useVideoCall(roomId, user) {
       if (data.userId !== user.id) {
         // give peerjs a moment to register
         setTimeout(() => {
-          const call = p.call(data.userId, myStream);
+          if (!streamRef.current) return;
+          const call = p.call(data.userId, streamRef.current);
           if (call) {
              call.on('stream', (remoteStream) => {
                setRemoteStreams((prev) => ({ ...prev, [data.userId]: remoteStream }));

@@ -18,7 +18,7 @@ export class PrescriptionsController {
 
   @Get()
   @UseGuards(RolesGuard)
-  @Roles('doctor', 'admin', 'pharmacy')
+  @Roles('doctor', 'admin', 'pharmacy', 'nurse')
   findAll() {
     return this.prescriptionsService.findAll();
   }

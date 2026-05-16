@@ -50,7 +50,7 @@ __decorate([
 __decorate([
     (0, common_1.Get)(),
     (0, common_1.UseGuards)(roles_guard_1.RolesGuard),
-    (0, roles_decorator_1.Roles)('doctor', 'admin', 'pharmacy'),
+    (0, roles_decorator_1.Roles)('doctor', 'admin', 'pharmacy', 'nurse'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
