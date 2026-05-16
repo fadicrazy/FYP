@@ -2,17 +2,33 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Consultation, ConsultationDocument, ConsultationStatus } from './consultation.schema';
-import { randomUUID } from 'crypto'; // ✅ uuid ki jagah crypto use kiya
+import { randomUUID } from 'crypto'; 
+import { NotificationsService } from '../notifications/notifications.service';
 
 @Injectable()
 export class ConsultationsService {
   constructor(
     @InjectModel(Consultation.name) private consultationModel: Model<ConsultationDocument>,
+    private readonly notificationsService: NotificationsService,
   ) {}
 
   async create(data: Partial<Consultation>): Promise<ConsultationDocument> {
     const consultation = new this.consultationModel(data);
-    return (await consultation.save()).populate([
+    const saved = await consultation.save();
+    
+    // Notify doctor or broadcast to all doctors (for now just a generic log)
+    // In a real app, you might notify a specific doctor if assigned
+    if (saved.doctorId) {
+      await this.notificationsService.create({
+        recipientId: saved.doctorId as any,
+        title: 'New Consultation Request',
+        message: 'A patient is waiting for consultation.',
+        type: 'info',
+        link: `/consultations/${saved._id}`
+      });
+    }
+
+    return saved.populate([
       { path: 'patientId', populate: { path: 'userId', select: '-password' } },
       { path: 'doctorId', select: '-password' },
       { path: 'nurseId', select: '-password' },
@@ -70,6 +86,16 @@ export class ConsultationsService {
       ])
       .exec();
     if (!consultation) throw new NotFoundException('Consultation not found');
+
+    // Notify Nurse
+    await this.notificationsService.create({
+      recipientId: consultation.nurseId as any,
+      title: 'Consultation Accepted',
+      message: 'A doctor has accepted your consultation request.',
+      type: 'success',
+      link: `/consultations/${consultation._id}`
+    });
+
     return consultation;
   }
 

@@ -110,4 +110,13 @@ export const uploadsAPI = {
   },
 };
 
+// ===== Notifications API =====
+export const notificationsAPI = {
+  getAll: () => API.get('/notifications'),
+  getUnreadCount: () => API.get('/notifications/unread-count'),
+  markAsRead: (id) => API.put(`/notifications/${id}/read`),
+  markAllAsRead: () => API.put('/notifications/read-all'),
+  delete: (id) => API.delete(`/notifications/${id}`),
+};
+
 export default API;

@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.VitalsController = void 0;
 const common_1 = require("@nestjs/common");
 const vitals_service_1 = require("./vitals.service");
+const create_vital_dto_1 = require("./dto/create-vital.dto");
 const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
 const roles_guard_1 = require("../auth/roles.guard");
 const roles_decorator_1 = require("../auth/roles.decorator");
@@ -23,8 +24,12 @@ let VitalsController = class VitalsController {
     constructor(vitalsService) {
         this.vitalsService = vitalsService;
     }
-    create(body, req) {
-        return this.vitalsService.create({ ...body, recordedBy: req.user.sub });
+    create(createVitalDto, req) {
+        return this.vitalsService.create({
+            ...createVitalDto,
+            patientId: createVitalDto.patientId,
+            recordedBy: req.user.sub
+        });
     }
     findByPatient(patientId) {
         return this.vitalsService.findByPatient(patientId);
@@ -41,7 +46,7 @@ __decorate([
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Request)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:paramtypes", [create_vital_dto_1.CreateVitalDto, Object]),
     __metadata("design:returntype", void 0)
 ], VitalsController.prototype, "create", null);
 __decorate([

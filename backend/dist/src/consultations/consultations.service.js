@@ -18,14 +18,27 @@ const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 const consultation_schema_1 = require("./consultation.schema");
 const crypto_1 = require("crypto");
+const notifications_service_1 = require("../notifications/notifications.service");
 let ConsultationsService = class ConsultationsService {
     consultationModel;
-    constructor(consultationModel) {
+    notificationsService;
+    constructor(consultationModel, notificationsService) {
         this.consultationModel = consultationModel;
+        this.notificationsService = notificationsService;
     }
     async create(data) {
         const consultation = new this.consultationModel(data);
-        return (await consultation.save()).populate([
+        const saved = await consultation.save();
+        if (saved.doctorId) {
+            await this.notificationsService.create({
+                recipientId: saved.doctorId,
+                title: 'New Consultation Request',
+                message: 'A patient is waiting for consultation.',
+                type: 'info',
+                link: `/consultations/${saved._id}`
+            });
+        }
+        return saved.populate([
             { path: 'patientId', populate: { path: 'userId', select: '-password' } },
             { path: 'doctorId', select: '-password' },
             { path: 'nurseId', select: '-password' },
@@ -75,6 +88,13 @@ let ConsultationsService = class ConsultationsService {
             .exec();
         if (!consultation)
             throw new common_1.NotFoundException('Consultation not found');
+        await this.notificationsService.create({
+            recipientId: consultation.nurseId,
+            title: 'Consultation Accepted',
+            message: 'A doctor has accepted your consultation request.',
+            type: 'success',
+            link: `/consultations/${consultation._id}`
+        });
         return consultation;
     }
     async start(id) {
@@ -134,6 +154,7 @@ exports.ConsultationsService = ConsultationsService;
 exports.ConsultationsService = ConsultationsService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, mongoose_1.InjectModel)(consultation_schema_1.Consultation.name)),
-    __metadata("design:paramtypes", [mongoose_2.Model])
+    __metadata("design:paramtypes", [mongoose_2.Model,
+        notifications_service_1.NotificationsService])
 ], ConsultationsService);
 //# sourceMappingURL=consultations.service.js.map

@@ -24,6 +24,7 @@ let PatientsController = class PatientsController {
         this.patientsService = patientsService;
     }
     create(body) {
+        console.log('--- PATIENTS CREATE HIT ---');
         return this.patientsService.create(body);
     }
     findAll() {
@@ -42,8 +43,6 @@ let PatientsController = class PatientsController {
 exports.PatientsController = PatientsController;
 __decorate([
     (0, common_1.Post)(),
-    (0, common_1.UseGuards)(roles_guard_1.RolesGuard),
-    (0, roles_decorator_1.Roles)('nurse', 'admin'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),

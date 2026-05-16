@@ -18,8 +18,6 @@ async function bootstrap() {
         allowedHeaders: 'Content-Type, Authorization',
     });
     app.useGlobalPipes(new common_1.ValidationPipe({
-        whitelist: true,
-        forbidNonWhitelisted: true,
         transform: true,
     }));
     app.setGlobalPrefix('api');

@@ -13,7 +13,7 @@ export class PrescriptionsController {
   @UseGuards(RolesGuard)
   @Roles('doctor')
   create(@Body() body: any, @Request() req: any) {
-    return this.prescriptionsService.create({ ...body, doctorId: req.user.sub });
+    return this.prescriptionsService.create({ ...body, doctorId: req.user.sub as any });
   }
 
   @Get()

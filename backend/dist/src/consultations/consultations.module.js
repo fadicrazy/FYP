@@ -12,12 +12,16 @@ const mongoose_1 = require("@nestjs/mongoose");
 const consultations_service_1 = require("./consultations.service");
 const consultations_controller_1 = require("./consultations.controller");
 const consultation_schema_1 = require("./consultation.schema");
+const notifications_module_1 = require("../notifications/notifications.module");
 let ConsultationsModule = class ConsultationsModule {
 };
 exports.ConsultationsModule = ConsultationsModule;
 exports.ConsultationsModule = ConsultationsModule = __decorate([
     (0, common_1.Module)({
-        imports: [mongoose_1.MongooseModule.forFeature([{ name: consultation_schema_1.Consultation.name, schema: consultation_schema_1.ConsultationSchema }])],
+        imports: [
+            mongoose_1.MongooseModule.forFeature([{ name: consultation_schema_1.Consultation.name, schema: consultation_schema_1.ConsultationSchema }]),
+            notifications_module_1.NotificationsModule,
+        ],
         controllers: [consultations_controller_1.ConsultationsController],
         providers: [consultations_service_1.ConsultationsService],
         exports: [consultations_service_1.ConsultationsService],

@@ -13,7 +13,7 @@ export class ConsultationsController {
   @UseGuards(RolesGuard)
   @Roles('nurse')
   create(@Body() body: any, @Request() req: any) {
-    return this.consultationsService.create({ ...body, nurseId: req.user.sub });
+    return this.consultationsService.create({ ...body, nurseId: req.user.sub as any });
   }
 
   @Get()

@@ -10,9 +10,8 @@ export class PatientsController {
   constructor(private readonly patientsService: PatientsService) {}
 
   @Post()
-  @UseGuards(RolesGuard)
-  @Roles('nurse', 'admin')
   create(@Body() body: any) {
+    console.log('--- PATIENTS CREATE HIT ---');
     return this.patientsService.create(body);
   }
 

@@ -3,9 +3,13 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConsultationsService } from './consultations.service';
 import { ConsultationsController } from './consultations.controller';
 import { Consultation, ConsultationSchema } from './consultation.schema';
+import { NotificationsModule } from '../notifications/notifications.module';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: Consultation.name, schema: ConsultationSchema }])],
+  imports: [
+    MongooseModule.forFeature([{ name: Consultation.name, schema: ConsultationSchema }]),
+    NotificationsModule,
+  ],
   controllers: [ConsultationsController],
   providers: [ConsultationsService],
   exports: [ConsultationsService],

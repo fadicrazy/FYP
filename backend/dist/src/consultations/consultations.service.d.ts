@@ -1,8 +1,10 @@
 import { Model } from 'mongoose';
 import { Consultation, ConsultationDocument } from './consultation.schema';
+import { NotificationsService } from '../notifications/notifications.service';
 export declare class ConsultationsService {
     private consultationModel;
-    constructor(consultationModel: Model<ConsultationDocument>);
+    private readonly notificationsService;
+    constructor(consultationModel: Model<ConsultationDocument>, notificationsService: NotificationsService);
     create(data: Partial<Consultation>): Promise<ConsultationDocument>;
     findAll(filters?: any): Promise<ConsultationDocument[]>;
     findById(id: string): Promise<ConsultationDocument>;

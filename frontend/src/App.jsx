@@ -25,6 +25,9 @@ import CreatePrescription from './pages/doctor/CreatePrescription';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import ManageUsers from './pages/admin/ManageUsers';
 
+// Shared
+import PrescriptionList from './pages/PrescriptionList';
+
 // Pharmacy
 import PharmacyDashboard from './pages/pharmacy/PharmacyDashboard';
 
@@ -74,7 +77,8 @@ function AppRoutes() {
 
         {/* Doctor routes */}
         <Route path="queue" element={<ProtectedRoute roles={['doctor']}><ConsultationQueue /></ProtectedRoute>} />
-        <Route path="prescriptions" element={<ProtectedRoute roles={['doctor', 'patient', 'pharmacy']}><CreatePrescription /></ProtectedRoute>} />
+        <Route path="prescriptions" element={<ProtectedRoute roles={['doctor', 'nurse', 'patient', 'pharmacy']}><PrescriptionList /></ProtectedRoute>} />
+        <Route path="create-prescription/:patientId" element={<ProtectedRoute roles={['doctor']}><CreatePrescription /></ProtectedRoute>} />
 
         {/* Admin routes */}
         <Route path="users" element={<ProtectedRoute roles={['admin']}><ManageUsers /></ProtectedRoute>} />

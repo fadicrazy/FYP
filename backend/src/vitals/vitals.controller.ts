@@ -1,5 +1,7 @@
 import { Controller, Get, Post, Param, Body, UseGuards, Request } from '@nestjs/common';
+import { Types } from 'mongoose';
 import { VitalsService } from './vitals.service';
+import { CreateVitalDto } from './dto/create-vital.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../auth/roles.decorator';
@@ -12,8 +14,12 @@ export class VitalsController {
   @Post()
   @UseGuards(RolesGuard)
   @Roles('nurse')
-  create(@Body() body: any, @Request() req: any) {
-    return this.vitalsService.create({ ...body, recordedBy: req.user.sub });
+  create(@Body() createVitalDto: CreateVitalDto, @Request() req: any) {
+    return this.vitalsService.create({ 
+      ...createVitalDto, 
+      patientId: createVitalDto.patientId as any,
+      recordedBy: req.user.sub as any 
+    });
   }
 
   @Get(':patientId')

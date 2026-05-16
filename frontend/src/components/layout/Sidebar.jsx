@@ -11,9 +11,10 @@ const roleMenus = {
   nurse: [
     { to: '/dashboard', icon: FiHome, label: 'Dashboard' },
     { to: '/dashboard/add-patient', icon: FiPlusCircle, label: 'Add Patient' },
-    { to: '/dashboard/patients', icon: FiUsers, label: 'Patients' },
+    {to: '/dashboard/patients', icon: FiUsers, label: 'Patients' },
     { to: '/dashboard/vitals', icon: FiActivity, label: 'Record Vitals' },
     { to: '/dashboard/request-consultation', icon: FiVideo, label: 'Request Consultation' },
+    { to: '/dashboard/prescriptions', icon: FiFileText, label: 'Prescriptions' },
   ],
   doctor: [
     { to: '/dashboard', icon: FiHome, label: 'Dashboard' },
