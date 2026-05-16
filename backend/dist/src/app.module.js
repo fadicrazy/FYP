@@ -24,6 +24,8 @@ const admin_module_1 = require("./admin/admin.module");
 const uploads_module_1 = require("./uploads/uploads.module");
 const chat_module_1 = require("./chat/chat.module");
 const video_module_1 = require("./video/video.module");
+const app_controller_1 = require("./app.controller");
+const app_service_1 = require("./app.service");
 const logger = new common_1.Logger('AppModule');
 let AppModule = class AppModule {
 };
@@ -62,6 +64,8 @@ exports.AppModule = AppModule = __decorate([
             chat_module_1.ChatModule,
             video_module_1.VideoModule,
         ],
+        controllers: [app_controller_1.AppController],
+        providers: [app_service_1.AppService],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map

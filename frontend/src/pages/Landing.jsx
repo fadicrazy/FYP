@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import API from '../api';
 import { FiHeart, FiVideo, FiShield, FiSmartphone, FiArrowRight, FiActivity, FiUsers, FiGlobe } from 'react-icons/fi';
 
 const fadeUp = {
@@ -21,14 +23,33 @@ const steps = [
   { num: '04', title: 'E-Prescription & Delivery', desc: 'Doctor prescribes medicine, pharmacy delivers to doorstep' },
 ];
 
-const stats = [
-  { value: '10K+', label: 'Patients Served', icon: FiUsers },
-  { value: '500+', label: 'Doctors Online', icon: FiHeart },
-  { value: '50+', label: 'Remote Areas', icon: FiGlobe },
-  { value: '99.9%', label: 'Uptime', icon: FiShield },
-];
-
 export default function Landing() {
+  const [liveStats, setLiveStats] = useState({
+    patientsServed: 0,
+    doctorsOnline: 0,
+    remoteAreas: 0,
+    patientsToday: 0
+  });
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const res = await API.get('/stats');
+        setLiveStats(res.data);
+      } catch (err) {
+        console.error('Failed to fetch stats:', err);
+      }
+    };
+    fetchStats();
+  }, []);
+
+  const statsDisplay = [
+    { value: liveStats.patientsServed.toLocaleString() + '+', label: 'Patients Served', icon: FiUsers },
+    { value: liveStats.doctorsOnline.toLocaleString() + '+', label: 'Doctors Online', icon: FiHeart },
+    { value: liveStats.remoteAreas.toLocaleString() + '+', label: 'Remote Areas', icon: FiGlobe },
+    { value: '99.9%', label: 'Uptime', icon: FiShield },
+  ];
+
   return (
     <div className="min-h-screen">
       {/* Navbar */}
@@ -53,7 +74,14 @@ export default function Landing() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-hero min-h-screen flex items-center overflow-hidden">
+      <section 
+        className="relative min-h-screen flex items-center overflow-hidden"
+        style={{
+          backgroundImage: "linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.9)), url('/bg-rural.png')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
         {/* Animated background orbs */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute -top-40 -right-40 w-96 h-96 bg-accent-400/10 rounded-full blur-3xl animate-float" />
@@ -112,11 +140,11 @@ export default function Landing() {
                 {/* Floating badges */}
                 <motion.div animate={{ y: [-10, 10, -10] }} transition={{ duration: 4, repeat: Infinity }} className="absolute -top-4 -right-4 glass rounded-2xl px-4 py-3 shadow-xl">
                   <p className="text-sm font-bold text-primary-500">🟢 Live Now</p>
-                  <p className="text-xs text-gray-500">12 Doctors Online</p>
+                  <p className="text-xs text-gray-500">{liveStats.doctorsOnline} Doctors Online</p>
                 </motion.div>
                 <motion.div animate={{ y: [10, -10, 10] }} transition={{ duration: 5, repeat: Infinity }} className="absolute -bottom-4 -left-4 glass rounded-2xl px-4 py-3 shadow-xl">
                   <p className="text-sm font-bold text-accent-500">✅ Today</p>
-                  <p className="text-xs text-gray-500">47 Patients Treated</p>
+                  <p className="text-xs text-gray-500">{liveStats.patientsToday} Patients Treated</p>
                 </motion.div>
               </div>
             </motion.div>
@@ -128,7 +156,7 @@ export default function Landing() {
       <section id="stats" className="py-16 bg-white border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((s, i) => (
+            {statsDisplay.map((s, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="text-center">
                 <div className="w-14 h-14 bg-accent-50 rounded-2xl flex items-center justify-center mx-auto mb-3">
                   <s.icon className="text-accent-500 text-2xl" />
@@ -191,7 +219,14 @@ export default function Landing() {
       </section>
 
       {/* CTA */}
-      <section className="py-24 bg-gradient-hero relative overflow-hidden">
+      <section 
+        className="py-24 relative overflow-hidden"
+        style={{
+          backgroundImage: "linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.95)), url('/bg-rural.png')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
         <div className="absolute inset-0">
           <div className="absolute top-0 right-0 w-96 h-96 bg-accent-400/5 rounded-full blur-3xl" />
         </div>

@@ -15,6 +15,8 @@ import { AdminModule } from './admin/admin.module';
 import { UploadsModule } from './uploads/uploads.module';
 import { ChatModule } from './chat/chat.module';
 import { VideoModule } from './video/video.module';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 const logger = new Logger('AppModule');
 
@@ -57,5 +59,7 @@ const logger = new Logger('AppModule');
     ChatModule,
     VideoModule,
   ],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
