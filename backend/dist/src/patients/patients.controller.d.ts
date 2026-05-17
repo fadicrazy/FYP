@@ -7,4 +7,5 @@ export declare class PatientsController {
     getMyProfile(req: any): Promise<import("./patient.schema").PatientDocument | null>;
     findOne(id: string): Promise<import("./patient.schema").PatientDocument>;
     update(id: string, body: any): Promise<import("./patient.schema").PatientDocument>;
+    remove(id: string): Promise<any>;
 }

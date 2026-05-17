@@ -20,6 +20,8 @@ import RequestConsultation from './pages/nurse/RequestConsultation';
 import DoctorDashboard from './pages/doctor/DoctorDashboard';
 import ConsultationQueue from './pages/doctor/ConsultationQueue';
 import CreatePrescription from './pages/doctor/CreatePrescription';
+import VitalsViewer from './pages/doctor/VitalsViewer';
+import DoctorAnalytics from './pages/doctor/DoctorAnalytics';
 
 // Admin
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -30,6 +32,9 @@ import PrescriptionList from './pages/PrescriptionList';
 
 // Pharmacy
 import PharmacyDashboard from './pages/pharmacy/PharmacyDashboard';
+import Deliveries from './pages/pharmacy/Deliveries';
+import Inventory from './pages/pharmacy/Inventory';
+import Reports from './pages/pharmacy/Reports';
 
 // Protected Route wrapper
 function ProtectedRoute({ children, roles }) {
@@ -79,6 +84,8 @@ function AppRoutes() {
         <Route path="queue" element={<ProtectedRoute roles={['doctor']}><ConsultationQueue /></ProtectedRoute>} />
         <Route path="prescriptions" element={<ProtectedRoute roles={['doctor', 'nurse', 'patient', 'pharmacy']}><PrescriptionList /></ProtectedRoute>} />
         <Route path="create-prescription/:patientId" element={<ProtectedRoute roles={['doctor']}><CreatePrescription /></ProtectedRoute>} />
+        <Route path="vitals-viewer" element={<ProtectedRoute roles={['doctor']}><VitalsViewer /></ProtectedRoute>} />
+        <Route path="doctor-analytics" element={<ProtectedRoute roles={['doctor']}><DoctorAnalytics /></ProtectedRoute>} />
 
         {/* Admin routes */}
         <Route path="users" element={<ProtectedRoute roles={['admin']}><ManageUsers /></ProtectedRoute>} />
@@ -86,7 +93,9 @@ function AppRoutes() {
         <Route path="activity" element={<ProtectedRoute roles={['admin']}><AdminDashboard /></ProtectedRoute>} />
 
         {/* Pharmacy routes */}
-        <Route path="deliveries" element={<ProtectedRoute roles={['pharmacy', 'admin']}><PharmacyDashboard /></ProtectedRoute>} />
+        <Route path="deliveries" element={<ProtectedRoute roles={['pharmacy', 'admin']}><Deliveries /></ProtectedRoute>} />
+        <Route path="inventory" element={<ProtectedRoute roles={['pharmacy', 'admin']}><Inventory /></ProtectedRoute>} />
+        <Route path="reports" element={<ProtectedRoute roles={['pharmacy', 'admin']}><Reports /></ProtectedRoute>} />
       </Route>
 
       {/* Fallback */}

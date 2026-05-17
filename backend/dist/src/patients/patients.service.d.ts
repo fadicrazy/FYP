@@ -9,4 +9,5 @@ export declare class PatientsService {
     findByUserId(userId: string): Promise<PatientDocument | null>;
     update(id: string, data: Partial<Patient>): Promise<PatientDocument>;
     count(): Promise<number>;
+    remove(id: string): Promise<any>;
 }

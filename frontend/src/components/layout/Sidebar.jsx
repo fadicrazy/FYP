@@ -21,6 +21,8 @@ const roleMenus = {
     { to: '/dashboard/queue', icon: FiClipboard, label: 'Consultation Queue' },
     { to: '/dashboard/patients', icon: FiUsers, label: 'Patient Records' },
     { to: '/dashboard/prescriptions', icon: FiFileText, label: 'Prescriptions' },
+    { to: '/dashboard/vitals-viewer', icon: FiActivity, label: 'Vitals Viewer' },
+    { to: '/dashboard/doctor-analytics', icon: FiBarChart2, label: 'Analytics' },
   ],
   admin: [
     { to: '/dashboard', icon: FiHome, label: 'Dashboard' },
@@ -32,6 +34,8 @@ const roleMenus = {
     { to: '/dashboard', icon: FiHome, label: 'Dashboard' },
     { to: '/dashboard/prescriptions', icon: FiFileText, label: 'Prescriptions' },
     { to: '/dashboard/deliveries', icon: FiTruck, label: 'Deliveries' },
+    { to: '/dashboard/inventory', icon: FiPackage, label: 'Inventory' },
+    { to: '/dashboard/reports', icon: FiBarChart2, label: 'Reports' },
   ],
 };
 

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Param, Body, Query, UseGuards, Request } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, Query, UseGuards, Request } from '@nestjs/common';
 import { DeliveriesService } from './deliveries.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
@@ -18,7 +18,7 @@ export class DeliveriesController {
 
   @Get()
   @UseGuards(RolesGuard)
-  @Roles('pharmacy', 'admin')
+  @Roles('pharmacy', 'admin', 'nurse')
   findAll(@Query('status') status?: string) {
     const filters: any = {};
     if (status) filters.status = status;
@@ -35,5 +35,12 @@ export class DeliveriesController {
   @Roles('pharmacy', 'admin')
   updateStatus(@Param('id') id: string, @Body() body: { status: string; trackingNotes?: string }) {
     return this.deliveriesService.updateStatus(id, body.status as any, body.trackingNotes);
+  }
+
+  @Delete(':id')
+  @UseGuards(RolesGuard)
+  @Roles('pharmacy', 'admin', 'nurse')
+  remove(@Param('id') id: string) {
+    return this.deliveriesService.remove(id);
   }
 }

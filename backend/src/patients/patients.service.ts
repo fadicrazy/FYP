@@ -38,4 +38,10 @@ export class PatientsService {
   async count(): Promise<number> {
     return this.patientModel.countDocuments().exec();
   }
+
+  async remove(id: string): Promise<any> {
+    const patient = await this.patientModel.findByIdAndDelete(id).exec();
+    if (!patient) throw new NotFoundException('Patient not found');
+    return patient;
+  }
 }

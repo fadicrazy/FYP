@@ -9,4 +9,5 @@ export declare class DeliveriesController {
         status: string;
         trackingNotes?: string;
     }): Promise<import("./delivery.schema").DeliveryDocument>;
+    remove(id: string): Promise<any>;
 }

@@ -50,6 +50,12 @@ let PatientsService = class PatientsService {
     async count() {
         return this.patientModel.countDocuments().exec();
     }
+    async remove(id) {
+        const patient = await this.patientModel.findByIdAndDelete(id).exec();
+        if (!patient)
+            throw new common_1.NotFoundException('Patient not found');
+        return patient;
+    }
 };
 exports.PatientsService = PatientsService;
 exports.PatientsService = PatientsService = __decorate([

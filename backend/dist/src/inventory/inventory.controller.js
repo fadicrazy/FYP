@@ -12,65 +12,76 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DeliveriesController = void 0;
+exports.InventoryController = void 0;
 const common_1 = require("@nestjs/common");
-const deliveries_service_1 = require("./deliveries.service");
+const inventory_service_1 = require("./inventory.service");
 const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
 const roles_guard_1 = require("../auth/roles.guard");
 const roles_decorator_1 = require("../auth/roles.decorator");
-let DeliveriesController = class DeliveriesController {
-    deliveriesService;
-    constructor(deliveriesService) {
-        this.deliveriesService = deliveriesService;
+let InventoryController = class InventoryController {
+    inventoryService;
+    constructor(inventoryService) {
+        this.inventoryService = inventoryService;
     }
-    create(body, req) {
-        return this.deliveriesService.create({ ...body, pharmacyId: req.user.sub });
+    getStats() {
+        return this.inventoryService.getPharmacyStats();
     }
-    findAll(status) {
-        const filters = {};
-        if (status)
-            filters.status = status;
-        return this.deliveriesService.findAll(filters);
+    create(body) {
+        return this.inventoryService.create(body);
+    }
+    findAll(search, category, lowStock) {
+        return this.inventoryService.findAll({ search, category, lowStock });
     }
     findOne(id) {
-        return this.deliveriesService.findById(id);
+        return this.inventoryService.findOne(id);
     }
-    updateStatus(id, body) {
-        return this.deliveriesService.updateStatus(id, body.status, body.trackingNotes);
+    update(id, body) {
+        return this.inventoryService.update(id, body);
     }
     remove(id) {
-        return this.deliveriesService.remove(id);
+        return this.inventoryService.remove(id);
     }
 };
-exports.DeliveriesController = DeliveriesController;
+exports.InventoryController = InventoryController;
+__decorate([
+    (0, common_1.Get)('stats'),
+    (0, common_1.UseGuards)(roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)('pharmacy', 'admin'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], InventoryController.prototype, "getStats", null);
 __decorate([
     (0, common_1.Post)(),
     (0, common_1.UseGuards)(roles_guard_1.RolesGuard),
     (0, roles_decorator_1.Roles)('pharmacy', 'admin'),
     __param(0, (0, common_1.Body)()),
-    __param(1, (0, common_1.Request)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
-], DeliveriesController.prototype, "create", null);
+], InventoryController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
     (0, common_1.UseGuards)(roles_guard_1.RolesGuard),
-    (0, roles_decorator_1.Roles)('pharmacy', 'admin', 'nurse'),
-    __param(0, (0, common_1.Query)('status')),
+    (0, roles_decorator_1.Roles)('pharmacy', 'admin'),
+    __param(0, (0, common_1.Query)('search')),
+    __param(1, (0, common_1.Query)('category')),
+    __param(2, (0, common_1.Query)('lowStock')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [String, String, String]),
     __metadata("design:returntype", void 0)
-], DeliveriesController.prototype, "findAll", null);
+], InventoryController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(':id'),
+    (0, common_1.UseGuards)(roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)('pharmacy', 'admin'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
-], DeliveriesController.prototype, "findOne", null);
+], InventoryController.prototype, "findOne", null);
 __decorate([
-    (0, common_1.Put)(':id/status'),
+    (0, common_1.Put)(':id'),
     (0, common_1.UseGuards)(roles_guard_1.RolesGuard),
     (0, roles_decorator_1.Roles)('pharmacy', 'admin'),
     __param(0, (0, common_1.Param)('id')),
@@ -78,19 +89,19 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", void 0)
-], DeliveriesController.prototype, "updateStatus", null);
+], InventoryController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),
     (0, common_1.UseGuards)(roles_guard_1.RolesGuard),
-    (0, roles_decorator_1.Roles)('pharmacy', 'admin', 'nurse'),
+    (0, roles_decorator_1.Roles)('pharmacy', 'admin'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
-], DeliveriesController.prototype, "remove", null);
-exports.DeliveriesController = DeliveriesController = __decorate([
-    (0, common_1.Controller)('deliveries'),
+], InventoryController.prototype, "remove", null);
+exports.InventoryController = InventoryController = __decorate([
+    (0, common_1.Controller)('inventory'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    __metadata("design:paramtypes", [deliveries_service_1.DeliveriesService])
-], DeliveriesController);
-//# sourceMappingURL=deliveries.controller.js.map
+    __metadata("design:paramtypes", [inventory_service_1.InventoryService])
+], InventoryController);
+//# sourceMappingURL=inventory.controller.js.map

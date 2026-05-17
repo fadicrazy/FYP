@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { consultationsAPI, prescriptionsAPI } from '../api';
+import { consultationsAPI, prescriptionsAPI, inventoryAPI } from '../api';
 import { useVideoCall } from '../hooks/useVideoCall';
 import { useChat } from '../hooks/useChat';
 import { FiVideo, FiMic, FiPhoneOff, FiMessageSquare, FiSend, FiFileText, FiPlus } from 'react-icons/fi';
@@ -23,9 +23,11 @@ export default function VideoRoom() {
   const [prescLoading, setPrescLoading] = useState(false);
   const [prescForm, setPrescForm] = useState({ diagnosis: '', instructions: '' });
   const [medicines, setMedicines] = useState([{ name: '', dosage: '', frequency: '', duration: '' }]);
+  const [availableMedicines, setAvailableMedicines] = useState([]);
 
   useEffect(() => {
     consultationsAPI.getById(id).then(r => setConsultation(r.data)).catch(console.error);
+    inventoryAPI.getAll().then(r => setAvailableMedicines(r.data || [])).catch(console.error);
   }, [id]);
 
   const handleSend = (e) => {
@@ -57,7 +59,7 @@ export default function VideoRoom() {
         instructions: prescForm.instructions,
         medicines
       });
-      toast.success('Prescription submitted and call ended');
+      toast.success('Prescription submitted, pharmacy inventory stock auto-deducted, and call completed!');
       navigate('/dashboard');
     } catch (err) {
       toast.error('Failed to submit prescription');
@@ -188,7 +190,26 @@ export default function VideoRoom() {
                 <div className="space-y-3">
                   {medicines.map((med, i) => (
                     <div key={i} className="grid grid-cols-4 gap-2 bg-gray-50 p-3 rounded-xl">
-                      <input className="input-field text-xs" placeholder="Name" value={med.name} onChange={e => updateMedicine(i, 'name', e.target.value)} required />
+                      <select 
+                        className="input-field text-xs font-bold bg-white" 
+                        value={med.name} 
+                        onChange={e => updateMedicine(i, 'name', e.target.value)} 
+                        required
+                      >
+                        <option value="">Select Med</option>
+                        {availableMedicines.map((m, idx) => {
+                          const countSelected = medicines.filter(selectedItem => selectedItem.name === m.name).length;
+                          // If this item is currently selected in this slot, don't double count it
+                          const liveStock = Math.max(0, m.stock - (countSelected * 10));
+                          const isOut = liveStock <= 0 && med.name !== m.name;
+
+                          return (
+                            <option key={idx} value={m.name} disabled={isOut}>
+                              {m.name} ({liveStock} left)
+                            </option>
+                          );
+                        })}
+                      </select>
                       <input className="input-field text-xs" placeholder="Dosage" value={med.dosage} onChange={e => updateMedicine(i, 'dosage', e.target.value)} />
                       <input className="input-field text-xs" placeholder="Freq" value={med.frequency} onChange={e => updateMedicine(i, 'frequency', e.target.value)} />
                       <input className="input-field text-xs" placeholder="Dur" value={med.duration} onChange={e => updateMedicine(i, 'duration', e.target.value)} />

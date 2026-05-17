@@ -90,6 +90,12 @@ let DeliveriesService = class DeliveriesService {
             { $group: { _id: '$status', count: { $sum: 1 } } },
         ]).exec();
     }
+    async remove(id) {
+        const result = await this.deliveryModel.findByIdAndDelete(id).exec();
+        if (!result)
+            throw new common_1.NotFoundException('Delivery not found');
+        return result;
+    }
 };
 exports.DeliveriesService = DeliveriesService;
 exports.DeliveriesService = DeliveriesService = __decorate([

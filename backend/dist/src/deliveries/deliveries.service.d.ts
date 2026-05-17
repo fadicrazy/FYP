@@ -9,4 +9,5 @@ export declare class DeliveriesService {
     updateStatus(id: string, status: DeliveryStatus, trackingNotes?: string): Promise<DeliveryDocument>;
     count(filters?: any): Promise<number>;
     countByStatus(): Promise<any>;
+    remove(id: string): Promise<any>;
 }

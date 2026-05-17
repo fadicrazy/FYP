@@ -43,6 +43,7 @@ export const patientsAPI = {
   getMyProfile: () => API.get('/patients/my-profile'),
   create: (data) => API.post('/patients', data),
   update: (id, data) => API.put(`/patients/${id}`, data),
+  delete: (id) => API.delete(`/patients/${id}`),
 };
 
 // ===== Vitals API =====
@@ -79,6 +80,17 @@ export const deliveriesAPI = {
   getById: (id) => API.get(`/deliveries/${id}`),
   create: (data) => API.post('/deliveries', data),
   updateStatus: (id, data) => API.put(`/deliveries/${id}/status`, data),
+  delete: (id) => API.delete(`/deliveries/${id}`),
+};
+
+// ===== Inventory API =====
+export const inventoryAPI = {
+  getAll: (params) => API.get('/inventory', { params }),
+  getById: (id) => API.get(`/inventory/${id}`),
+  create: (data) => API.post('/inventory', data),
+  update: (id, data) => API.put(`/inventory/${id}`, data),
+  delete: (id) => API.delete(`/inventory/${id}`),
+  getStats: () => API.get('/inventory/stats'),
 };
 
 // ===== Admin API =====

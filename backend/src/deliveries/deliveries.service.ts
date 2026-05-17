@@ -77,4 +77,10 @@ export class DeliveriesService {
       { $group: { _id: '$status', count: { $sum: 1 } } },
     ]).exec();
   }
+
+  async remove(id: string): Promise<any> {
+    const result = await this.deliveryModel.findByIdAndDelete(id).exec();
+    if (!result) throw new NotFoundException('Delivery not found');
+    return result;
+  }
 }

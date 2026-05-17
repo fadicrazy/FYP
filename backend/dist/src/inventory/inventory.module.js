@@ -6,27 +6,29 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PrescriptionsModule = void 0;
+exports.InventoryModule = void 0;
 const common_1 = require("@nestjs/common");
 const mongoose_1 = require("@nestjs/mongoose");
-const prescriptions_service_1 = require("./prescriptions.service");
-const prescriptions_controller_1 = require("./prescriptions.controller");
-const prescription_schema_1 = require("./prescription.schema");
-const medicine_schema_1 = require("../inventory/medicine.schema");
-let PrescriptionsModule = class PrescriptionsModule {
+const inventory_controller_1 = require("./inventory.controller");
+const inventory_service_1 = require("./inventory.service");
+const medicine_schema_1 = require("./medicine.schema");
+const prescription_schema_1 = require("../prescriptions/prescription.schema");
+const delivery_schema_1 = require("../deliveries/delivery.schema");
+let InventoryModule = class InventoryModule {
 };
-exports.PrescriptionsModule = PrescriptionsModule;
-exports.PrescriptionsModule = PrescriptionsModule = __decorate([
+exports.InventoryModule = InventoryModule;
+exports.InventoryModule = InventoryModule = __decorate([
     (0, common_1.Module)({
         imports: [
             mongoose_1.MongooseModule.forFeature([
-                { name: prescription_schema_1.Prescription.name, schema: prescription_schema_1.PrescriptionSchema },
                 { name: medicine_schema_1.Medicine.name, schema: medicine_schema_1.MedicineSchema },
+                { name: prescription_schema_1.Prescription.name, schema: prescription_schema_1.PrescriptionSchema },
+                { name: delivery_schema_1.Delivery.name, schema: delivery_schema_1.DeliverySchema },
             ]),
         ],
-        controllers: [prescriptions_controller_1.PrescriptionsController],
-        providers: [prescriptions_service_1.PrescriptionsService],
-        exports: [prescriptions_service_1.PrescriptionsService],
+        controllers: [inventory_controller_1.InventoryController],
+        providers: [inventory_service_1.InventoryService],
+        exports: [inventory_service_1.InventoryService],
     })
-], PrescriptionsModule);
-//# sourceMappingURL=prescriptions.module.js.map
+], InventoryModule);
+//# sourceMappingURL=inventory.module.js.map
